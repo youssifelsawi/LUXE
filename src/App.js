@@ -1,25 +1,47 @@
-import logo from './logo.svg';
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
+import Header from './components/shared/Header';
+import Footer from './components/shared/Footer';
+import Newsletter from './components/shared/Newsletter';
+import ScrollToTop from './components/shared/ScrollToTop';
+import AboutPage from './pages/AboutPage';
+import AccountPage from './pages/AccountPage';
+import CartPage from './pages/CartPage';
+import CollectionDetail from './pages/CollectionDetail';
+import CollectionsPage from './pages/CollectionsPage';
+import HomePage from './pages/HomePage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import ProductsPage from './pages/ProductsPage';
 import './App.css';
 
-function App() {
+const App = () => {
+  const location = useLocation();
+  const showNewsletter = location.pathname === '/';
+  const showFooter = location.pathname !== '/cart';
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider>
+      <ScrollToTop />
+      <div className="min-h-screen bg-white">
+        <Header />
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/collections" element={<CollectionsPage />} />
+          <Route path="/collections/:id" element={<CollectionDetail />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/account" element={<AccountPage />} />
+        </Routes>
+
+        {showNewsletter && <Newsletter />}
+        {showFooter && <Footer />}
+      </div>
+    </AppProvider>
   );
-}
+};
 
 export default App;
